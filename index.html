@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💐 Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10 💐</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      touch-action: none;
+    }
+
+    .background {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.imgur.com/bzJb6Dn.jpg'); /* ảnh nền có sẵn */
+      background-size: cover;
+      background-position: center;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease-out;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+    }
+
+    .falling-text {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .text {
+      position: absolute;
+      top: -100px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #ffb6c1;
+      text-shadow: 0 0 10px #fff;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) scale(1); opacity: 1; }
+      100% { transform: translateY(110vh) scale(1.2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background" id="bg"></div>
+  <div class="overlay"></div>
+  <div class="falling-text"></div>
+
+  <script>
+    // ===== Zoom bằng tay hoặc cuộn chuột =====
+    const bg = document.getElementById('bg');
+    let scale = 1;
+    let startDistance = 0;
+
+    function getDistance(touches) {
+      const [a, b] = touches;
+      return Math.hypot(a.pageX - b.pageX, a.pageY - b.pageY);
+    }
+
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        startDistance = getDistance(e.touches);
+      }
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2) {
+        const newDistance = getDistance(e.touches);
+        const zoom = newDistance / startDistance;
+        scale = Math.min(Math.max(scale * zoom, 0.5), 3);
+        bg.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        startDistance = newDistance;
+      }
+    });
+
+    document.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      scale += e.deltaY * -0.001;
+      scale = Math.min(Math.max(0.5, scale), 3);
+      bg.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    });
+
+    // ===== Lời chúc =====
+    const messages = [
+      "💐 Chúc mừng ngày Phụ Nữ Việt Nam 20/10 💐",
+      "Chúc các cô, các chị, các bạn luôn xinh đẹp và hạnh phúc 🌸",
+      "Mong mọi điều tốt đẹp nhất sẽ đến với các bạn 💕",
+      "Luôn mỉm cười, yêu đời và thành công trong mọi việc ✨",
+      "Cảm ơn vì đã mang đến niềm vui và sắc màu cho cuộc sống này 🌼",
+      "Chúc các bạn có một ngày 20/10 thật đáng nhớ và ý nghĩa 💖",
+      "Hãy luôn tự tin, mạnh mẽ và tỏa sáng theo cách riêng của mình 💫",
+      "Vì thế giới này trở nên đẹp hơn là nhờ có các bạn 🌷",
+      "Chúc mọi điều ngọt ngào và bình yên nhất đến với các bạn nữ 💝"
+    ];
+
+    const container = document.querySelector('.falling-text');
+
+    function createText() {
+      const text = document.createElement('div');
+      text.className = 'text';
+      text.textContent = messages[Math.floor(Math.random() * messages.length)];
+      text.style.left = Math.random() * 80 + 'vw';
+      text.style.animationDuration = 6 + Math.random() * 3 + 's';
+      container.appendChild(text);
+      setTimeout(() => text.remove(), 10000);
+    }
+
+    setInterval(createText, 800);
+  </script>
+</body>
+</html>
